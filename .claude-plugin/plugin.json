@@ -1,0 +1,16 @@
+{
+  "name": "workflow-plugin",
+  "description": "Spec-driven workflow plugin for native development teams. Structures feature development through a fixed pipeline with spec-as-SOT, TDD judgment gates, and spec-code alignment enforcement.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Native Dev Team"
+  },
+  "keywords": [
+    "workflow",
+    "spec-driven",
+    "sdd",
+    "tdd",
+    "native",
+    "onboarding"
+  ]
+}
