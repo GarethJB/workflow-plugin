@@ -12,7 +12,7 @@ Spec 중심 파이프라인으로 feature 개발을 구조적으로 조형한다
 - **Spec = SOT.** Spec이 소스코드의 단일 진실 공급원이다.
 - **구조적 조형.** 이 skill은 워크플로우 자체의 형태를 강제한다. 단계를 안내하거나 추천하는 것이 아니라, 구조를 보증한다.
 - **고정 구조, 가변 깊이.** 모든 작업이 동일한 7단계 파이프라인을 통과한다. 각 단계의 밀도만 작업 규모에 따라 달라진다.
-- **Spec 수정 권한 분리.** Spec 문서의 내용 수정(섹션 1~14)은 `spec-writing` skill을 통해서만 수행한다. 이 skill(feature)은 라이프사이클 조작(status 전이, Changelog 기록)만 직접 수행한다. Spec을 직접 편집하지 않는다.
+- **Spec 수정 권한 분리.** Spec 문서의 내용 수정(섹션 1~14)은 `spec-writing` skill을 통해서만 수행한다. 이 skill(feature)은 라이프사이클 조작(status 전이, Changelog 기록)만 직접 수행한다. Spec 파일은 hook으로 보호되므로, 라이프사이클 조작 시에도 잠금 파일(`touch .spec-writing-active` → 수정 → `rm .spec-writing-active`)을 사용해야 한다.
 
 ## 파이프라인
 
