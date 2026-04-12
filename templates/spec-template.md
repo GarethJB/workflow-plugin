@@ -2,7 +2,7 @@
 id: SPEC-XXX
 title: 기능명
 status: draft
-superseded_by:
+superseded_by:        # 빈 값 유지. superseded 시 후속 Spec ID 기입 (예: SPEC-002)
 related_specs: []
 author: 작성자
 created: YYYY-MM-DD

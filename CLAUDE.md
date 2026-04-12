@@ -20,6 +20,7 @@ Claude Code 플러그인 규격을 따른다:
 - `skills/spec-writing/SKILL.md` — Spec 작성 skill
 - `templates/spec-template.md` — Spec 형식 템플릿
 - `specs/` — 프로젝트 Spec 파일 저장소
+- `debug-logs/` — 디버깅 기록 저장소 (DEBUG-XXX.md)
 
 Spec 형식: 15개 섹션, 계약 기반 4그룹 (정의 → 계약 → 실현 → 보증).
 feature 파이프라인: Spec 작성 → 승인 → 계획 → TDD 판단 → 구현 → 검증 → 완료.
