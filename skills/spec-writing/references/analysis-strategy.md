@@ -33,6 +33,7 @@
 | **Figma** | `figma.com` URL | Figma MCP (`get_design_context`, `get_screenshot`) |
 | **이미지** | `.png`, `.jpg`, `.jpeg`, `.webp` 등 | Read 도구 (이미지 모드) |
 | **마크다운** | `.md` 확장자 | Read 도구 |
+| **brainstorming 설계 문서** | `docs/superpowers/specs/*-design.md` 경로 | Read 도구 |
 | **워드** | `.docx` 확장자 | Bash로 텍스트 추출 또는 Read 시도 |
 | **HTML / 노션 내보내기** | `.html` 확장자 | Read 도구 |
 | **텍스트** | `.txt` 또는 확장자 없음 | Read 도구 |
@@ -219,6 +220,7 @@ Read 도구로 읽는다.
 
 | 형식 | 잘 채우는 섹션 | 보통 빈 섹션 |
 |---|---|---|
+| **brainstorming 설계 문서** | 목적, 범위, 행위 명세(접근 방식 확정), 기술 설계(구조) | 에러 처리 세부사항, 성능 기준, 테스트 전략 |
 | **PDF (기획서)** | 목적, 행위 명세(정상 흐름), 범위 | 기술 설계, 성능 기준, 테스트 전략 |
 | **Figma** | 행위 명세(UI 흐름), 범위(화면 목록) | 에러 처리, 기술 설계, 성능 기준, 전제 |
 | **이미지 (화면 캡처)** | 행위 명세(현재 상태), 범위 | 거의 모든 How 섹션 |
