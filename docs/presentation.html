@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>workflow-plugin 소개</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+<style>
+  :root {
+    --accent: #1976d2;      /* primary cool blue */
+    --accent2: #0097a7;     /* teal accent */
+    --accent-soft: #e3f2fd; /* pale blue surface */
+    --ink: #0d2339;         /* deep blue-ink text */
+    --dim: #607d8b;         /* muted slate */
+    --rule: #cfd8dc;
+  }
+  .reveal-viewport { background: #ffffff; }
+  .reveal { font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; color: var(--ink); font-size: 32px; }
+  .reveal .slides { text-align: left; }
+  .reveal .slides > section,
+  .reveal .slides > section > section {
+    padding: 48px 72px !important;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .reveal .slides > section.title-slide {
+    justify-content: center;
+  }
+  .reveal h1, .reveal h2 { text-align: center; margin-top: 0; margin-bottom: 1.2em; }
+  .reveal h1, .reveal h2, .reveal h3 { color: var(--accent); letter-spacing: -0.02em; text-transform: none; }
+  .reveal h1 { font-size: 2em; }
+  .reveal h2 { font-size: 1.45em; }
+  .reveal h3 { font-size: 1.1em; color: var(--accent2); }
+  .reveal strong { color: var(--ink); }
+  .reveal em { color: var(--accent2); font-style: normal; font-weight: 600; }
+  .reveal code { color: var(--accent); background: var(--accent-soft); padding: 0 .3em; border-radius: 3px; }
+  .reveal pre { font-size: 0.55em; }
+  .reveal pre code { line-height: 1.35; padding: 1em; }
+  .reveal ul, .reveal ol { margin-left: 1em; }
+  .reveal li { margin: 0.35em 0; }
+  .reveal .muted { color: var(--dim); font-size: 0.8em; }
+  .reveal .lead { font-size: 1.05em; line-height: 1.5; }
+  .reveal .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.55em; background: var(--accent); color: #fff; margin-right: 6px; vertical-align: middle; }
+  .reveal .tag-alt { background: var(--accent2); color: #fff; }
+  .reveal table { font-size: 0.7em; border-collapse: collapse; margin: 0.5em 0; }
+  .reveal th, .reveal td { padding: 8px 14px; border-bottom: 1px solid var(--rule); text-align: left; }
+  .reveal th { color: var(--accent); font-weight: 600; border-bottom: 2px solid var(--accent); }
+  .reveal .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; text-align: left; }
+  .reveal .card { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 0.8em 1em; border-radius: 4px; }
+  .reveal .card h3 { margin-top: 0; }
+  .reveal .sdd-card ul { font-size: 0.75em; line-height: 1.5; }
+  .reveal .sdd-card li { margin: 0.25em 0; }
+  .reveal .centered { text-align: center; }
+  .reveal .flow { font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.55em; line-height: 1.45; text-align: left; background: var(--accent-soft); color: var(--ink); padding: 1em 1.5em; border-radius: 6px; white-space: pre; border: 1px solid var(--rule); }
+  .reveal .step-list { counter-reset: step; list-style: none; padding-left: 0; }
+  .reveal .step-list li { counter-increment: step; padding-left: 2.5em; position: relative; margin: 0.45em 0; }
+  .reveal .step-list li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 1.8em; height: 1.8em; line-height: 1.8em; text-align: center; background: var(--accent); color: #fff; border-radius: 50%; font-weight: bold; font-size: 0.8em; }
+  .reveal .footer { position: fixed; bottom: 12px; right: 24px; color: var(--dim); font-size: 0.45em; }
+  .reveal .title-slide { text-align: center; }
+  .reveal .title-slide h1 { font-size: 3em; margin-bottom: 0.3em; }
+  .reveal .title-slide .subtitle { color: var(--dim); font-size: 1.1em; margin-bottom: 2em; }
+  .reveal .progress { color: var(--accent); }
+  .reveal .controls { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1. Title -->
+    <section class="title-slide">
+      <h1>workflow-plugin</h1>
+      <div class="subtitle">Spec 중심의 네이티브 개발 워크플로우</div>
+      <p class="muted">Claude Code 플러그인 · Native Dev Team</p>
+    </section>
+
+    <!-- 2. Spec-Driven Development -->
+    <section>
+      <h2>스펙 주도 개발 (SDD) 란?</h2>
+      <p class="muted" style="margin-top:-0.5em">Spec-Driven Development</p>
+      <p class="lead">
+        코드를 먼저 쓰고 문서를 뒤에 맞추는 대신,<br>
+        <em>Spec을 합의의 중심 축</em>으로 삼고 구현·테스트·리뷰가 그 위에서 돌아가게 하는 방법론.
+      </p>
+      <div class="two-col" style="margin-top:1em">
+        <div class="card sdd-card">
+          <h3>전통 방식의 한계</h3>
+          <ul>
+            <li>코드가 유일한 SOT가 되면서 "왜"가 소실</li>
+            <li>요구사항이 기획서·회의·팀채팅 등에 흩어짐</li>
+            <li>AI/신규 팀원이 맥락을 재구성하기 어려움</li>
+          </ul>
+        </div>
+        <div class="card sdd-card">
+          <h3>SDD가 바꾸는 것</h3>
+          <ul>
+            <li>Spec이 <em>단일 진실 원천(SOT)</em></li>
+            <li>구현 전 수락 기준을 합의</li>
+            <li>AI가 Spec을 읽고·따르고·갱신</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3a. SDD의 핵심 원칙 8가지 (1~4) -->
+    <section>
+      <h2>SDD의 핵심 원칙 8가지 <span style="font-size:0.5em; color:var(--dim)">(1/2)</span></h2>
+      <p class="muted" style="margin-top:-0.6em; font-size:0.7em; text-align:center">Shen Li의 원문을 기반으로 프로젝트 관점에서 재서술</p>
+      <div class="two-col" style="gap:1em 1.5em; margin-top:0.8em">
+        <div class="card sdd-card">
+          <h3>1. 맥락이 생산성이다</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">기존 API·데이터 구조·설계 패턴을 문서로 제공해야 AI가 프로젝트 관행을 이해한다.</p>
+        </div>
+        <div class="card sdd-card">
+          <h3>2. 명령은 구조화한다</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">문제·사용자 흐름·기술 요구·수락 기준을 명시한다. 빈칸이 많은 요청은 빈칸이 많은 결과를 낳는다.</p>
+        </div>
+        <div class="card sdd-card">
+          <h3>3. 살아있는 프로젝트 핸드북</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">프로젝트 관행을 한 문서에 누적해 신규 팀원(사람이든 AI든)의 진입점으로 삼는다.</p>
+        </div>
+        <div class="card sdd-card">
+          <h3>4. AI는 유능하지만 맥락이 부족한 팀원</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">지시는 구체적으로, 결과는 반드시 검증한다.</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:1em; font-size:0.6em; line-height:1.5">
+        참고 — <a href="https://medium.com/@shenli3514/spec-driven-development-sdd-is-the-future-of-software-engineering-85b258cea241" target="_blank" rel="noopener">Spec-Driven Development (SDD) is the Future of Software Engineering · Shen Li, Medium</a>
+      </p>
+    </section>
+
+    <!-- 3b. SDD의 핵심 원칙 8가지 (5~8) -->
+    <section>
+      <h2>SDD의 핵심 원칙 8가지 <span style="font-size:0.5em; color:var(--dim)">(2/2)</span></h2>
+      <div class="two-col" style="gap:1em 1.5em; margin-top:0.8em">
+        <div class="card sdd-card">
+          <h3>5. 코드보다 문서가 먼저</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">설계·요구·아키텍처를 구현 이전에 써둔다. 문서가 합의의 결과이자 구현의 씨앗.</p>
+        </div>
+        <div class="card sdd-card">
+          <h3>6. SDD는 천장이 아니라, 바닥을 올린다</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">개발자가 문제를 이해한 상태에서만 AI가 생산성을 끌어올린다. 아키텍처·UX의 주도권은 사람.</p>
+        </div>
+        <div class="card sdd-card">
+          <h3>7. Accept-All 금지</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">읽지 않고 승인하면 품질이 무너진다. 결정마다 사람의 이해와 검증이 동반된다.</p>
+        </div>
+        <div class="card sdd-card">
+          <h3>8. 패턴을 맥락으로 환류</h3>
+          <p style="font-size:0.8em; margin:0; line-height:1.5">기능 완료 후 발견된 패턴은 프로젝트 핸드북에 반영해 다음 기능이 그 위에서 시작하게 한다.</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:1em; font-size:0.6em; line-height:1.5">
+        참고 — <a href="https://medium.com/@shenli3514/spec-driven-development-sdd-is-the-future-of-software-engineering-85b258cea241" target="_blank" rel="noopener">Spec-Driven Development (SDD) is the Future of Software Engineering · Shen Li, Medium</a>
+      </p>
+    </section>
+
+    <!-- 4. 한 줄 정의 -->
+    <section>
+      <h2>한 줄 정의</h2>
+      <p class="lead">
+        <strong>workflow-plugin</strong>은<br>
+        네이티브 개발부서의 워크플로우를 <em>Spec 중심</em>으로 구조화하는<br>
+        Claude Code 플러그인이다.
+      </p>
+      <p class="muted">기획·합의·구현·검증의 경계를 느슨한 대화 대신 <em>파일로 정착된 계약</em>으로 바꾼다.</p>
+    </section>
+
+    <!-- 4. 워크플로우 다이어그램 -->
+    <section>
+      <h2>워크플로우 한눈에 보기</h2>
+      <div style="display:flex; justify-content:center;">
+        <svg viewBox="0 0 1080 560" width="100%" style="max-width:1000px; height:auto;" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="workflow diagram">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#1976d2"/>
+            </marker>
+            <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#0097a7"/>
+            </marker>
+            <marker id="arrow-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#c62828"/>
+            </marker>
+            <style>
+              .box       { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; }
+              .box-alt   { fill: #e0f7fa; stroke: #0097a7; stroke-width: 2; }
+              .box-soft  { fill: #fafafa; stroke: #90a4ae; stroke-width: 1.5; stroke-dasharray: 4 3; }
+              .t-title   { font: 600 20px 'Pretendard','Noto Sans KR',sans-serif; fill: #0d2339; }
+              .t-sub     { font: 400 14px 'Pretendard','Noto Sans KR',sans-serif; fill: #37474f; }
+              .t-label   { font: 500 13px 'Pretendard','Noto Sans KR',sans-serif; fill: #1976d2; }
+              .t-label-teal { font: 500 13px 'Pretendard','Noto Sans KR',sans-serif; fill: #0097a7; }
+              .t-label-warn { font: 500 13px 'Pretendard','Noto Sans KR',sans-serif; fill: #c62828; }
+              .line       { stroke: #1976d2; stroke-width: 2; fill: none; }
+              .line-teal  { stroke: #0097a7; stroke-width: 2; fill: none; }
+              .line-warn  { stroke: #c62828; stroke-width: 2; fill: none; }
+            </style>
+          </defs>
+
+          <!-- 기획 문서 -->
+          <rect class="box-soft" x="420" y="20" width="240" height="56" rx="10" ry="10"/>
+          <text class="t-title" x="540" y="55" text-anchor="middle">기획 문서 · 아이디어</text>
+
+          <!-- 기획 -> spec-writing 쪽으로 내려감 -->
+          <path class="line" d="M540,76 L540,110 L190,110 L190,285" marker-end="url(#arrow)"/>
+
+          <!-- spec-writing (feature와 debug 사이 수직 중앙) -->
+          <rect class="box" x="60" y="285" width="260" height="100" rx="10" ry="10"/>
+          <text class="t-title" x="190" y="322" text-anchor="middle">spec-writing</text>
+          <text class="t-sub"   x="190" y="348" text-anchor="middle">Spec 작성 · 수정</text>
+          <text class="t-sub"   x="190" y="368" text-anchor="middle">(15섹션 고정 · 락 파일 보호)</text>
+
+          <!-- feature -->
+          <rect class="box" x="420" y="150" width="600" height="120" rx="10" ry="10"/>
+          <text class="t-title" x="720" y="185" text-anchor="middle">feature (7단계)</text>
+          <text class="t-sub"   x="720" y="215" text-anchor="middle">Spec 작성 → 승인 → 계획 → Practice 선택</text>
+          <text class="t-sub"   x="720" y="240" text-anchor="middle">→ 구현 → 검증 → 완료</text>
+
+          <!-- debug -->
+          <rect class="box-alt" x="420" y="400" width="600" height="120" rx="10" ry="10"/>
+          <text class="t-title" x="720" y="435" text-anchor="middle">debug (8단계)</text>
+          <text class="t-sub"   x="720" y="465" text-anchor="middle">증상 → Spec 확인 → 가설 → 검증</text>
+          <text class="t-sub"   x="720" y="490" text-anchor="middle">→ 원인 확정 → 수정 → 회귀 → 완료</text>
+
+          <!-- spec-writing -> feature : Spec 제공 (곡선으로 위로 올라감) -->
+          <path class="line" d="M320,310 C370,310 370,210 420,210" marker-end="url(#arrow)"/>
+          <text class="t-label" x="360" y="255" text-anchor="end">Spec 제공</text>
+
+          <!-- feature -> debug : 검증 실패 -->
+          <path class="line-warn" d="M720,270 L720,400" marker-end="url(#arrow-warn)"/>
+          <text class="t-label-warn" x="735" y="340">검증 실패</text>
+
+          <!-- debug -> spec-writing : spec_flags · 회귀 테스트 반영 (직각 우회) -->
+          <path class="line-teal" d="M420,460 L40,460 L40,335 L60,335" marker-end="url(#arrow-teal)"/>
+          <text class="t-label-teal" x="230" y="448" text-anchor="middle">spec_flags · 회귀 테스트 반영</text>
+        </svg>
+      </div>
+      <p class="muted" style="margin-top:0.8em; text-align:center">진입점은 항상 Spec. <code>feature</code> ↔ <code>debug</code>는 양방향으로 묶인다.</p>
+    </section>
+
+    <!-- 5. 스킬 구성 -->
+    <section>
+      <h2>스킬 구성</h2>
+      <div class="two-col">
+        <div>
+          <h3>최상위 (3)</h3>
+          <ul>
+            <li><span class="tag">SPEC</span><code>spec-writing</code><br><span class="muted">Spec 작성·수정 전담</span></li>
+            <li><span class="tag">FLOW</span><code>feature</code><br><span class="muted">7단계 기능 개발 파이프라인</span></li>
+            <li><span class="tag">FLOW</span><code>debug</code><br><span class="muted">8단계 버그 수정 파이프라인</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Practice (3 · 위험도별)</h3>
+          <ul>
+            <li><span class="tag tag-alt">고</span>practice-tdd</li>
+            <li><span class="tag tag-alt">중</span>practice-walking-skeleton</li>
+            <li><span class="tag tag-alt">저</span>practice-implementation-first</li>
+          </ul>
+          <p class="muted">feature 4단계에서 위험도에 따라 선택</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. 핵심 원칙 -->
+    <section>
+      <h2>핵심 원칙 9</h2>
+      <ol class="step-list" style="font-size:0.85em">
+        <li><strong>Spec이 SOT다.</strong> 엇갈리면 Spec이 기준.</li>
+        <li><strong>15섹션 고정 구조.</strong> 4그룹(정의 / 계약 / 실현 / 보증).</li>
+        <li><strong>Spec은 <code>spec-writing</code> 스킬로만 편집.</strong> 훅+락으로 직접 편집 차단.</li>
+        <li><strong>수락 기준은 번호로.</strong> <code>AC-NN</code>·<code>§N</code>을 커밋·이슈·테스트에 그대로.</li>
+        <li><strong>AI는 대신 결정하지 않는다.</strong> 복수 안 제시, 개발자가 선택.</li>
+        <li><strong>단계마다 Changelog에 마커.</strong> 재개 지점 복원.</li>
+        <li><strong>계획이 먼저, 구현은 나중.</strong></li>
+        <li><strong>프로젝트 전역 맥락은 CLAUDE.md.</strong> 자동 로드되는 살아있는 핸드북.</li>
+        <li><strong>요청은 5필드로 구조화.</strong> 문제·맥락·기대 결과·제약·산출물.</li>
+      </ol>
+    </section>
+
+    <!-- 6b. CLAUDE.md as context doc -->
+    <section>
+      <h2>프로젝트 전역 맥락 · CLAUDE.md</h2>
+      <p class="lead" style="font-size:0.95em">Claude Code가 <em>모든 세션에 자동 주입</em>하는 살아있는 핸드북.</p>
+      <div class="two-col">
+        <div class="card">
+          <h3>CLAUDE.md에 담는 것</h3>
+          <ul style="font-size:0.8em">
+            <li>아키텍처 레이어·모듈 경계</li>
+            <li>API 카탈로그·외부 의존성</li>
+            <li>상태 관리·에러 전파 규칙</li>
+            <li>프로젝트 전역 테스트 계층</li>
+            <li>스타일·네이밍 컨벤션</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>기능 Spec과의 관계</h3>
+          <ul style="font-size:0.8em">
+            <li>일반 Spec은 CLAUDE.md의 규약을 <em>반복 기술하지 않는다</em></li>
+            <li>§4·§10.1은 해당 Spec 고유의 결정만 기록</li>
+            <li>feature 7단계: 새 패턴 발견 시 <code>pattern-extracted:</code> 마커만 기록</li>
+            <li>CLAUDE.md도 SOT — 파이프라인은 직접 수정하지 않고 사람이 별도 리뷰로 반영 결정</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6c. 구조화된 요청 5필드 -->
+    <section>
+      <h2>구조화된 요청 5필드</h2>
+      <p class="muted" style="margin-top:-0.3em">모호한 요청은 스킬도 구제 못 한다</p>
+      <table style="font-size:0.78em">
+        <tr><th>#</th><th>필드</th><th>내용</th></tr>
+        <tr><td>1</td><td><strong>문제</strong></td><td>무엇이 필요한가 / 무엇이 고장났는가. 한 문장.</td></tr>
+        <tr><td>2</td><td><strong>맥락</strong></td><td>관련 Spec·AC-NN, CLAUDE.md의 전역 규약</td></tr>
+        <tr><td>3</td><td><strong>기대 결과</strong></td><td>"완료"의 관찰 가능한 정의</td></tr>
+        <tr><td>4</td><td><strong>제약</strong></td><td>시간·플랫폼·위험도·금지 사항</td></tr>
+        <tr><td>5</td><td><strong>산출물 형식</strong></td><td>Spec / 구현 커밋 / 가설 목록 / 분석 보고</td></tr>
+      </table>
+      <p class="muted" style="margin-top:0.8em">상세 템플릿과 예시: <code>docs/structured-request.md</code></p>
+    </section>
+
+    <!-- 7. Spec 15섹션 -->
+    <section>
+      <h2>Spec 15섹션 구조</h2>
+      <table>
+        <tr><th>그룹</th><th>섹션</th><th>역할</th></tr>
+        <tr><td><span class="tag">정의</span></td><td>§1-4</td><td>목적 · 용어 · 전제 · 의존성</td></tr>
+        <tr><td><span class="tag">계약</span></td><td>§5-9</td><td>행위 · 에러 · 범위 · 제약 · 성능</td></tr>
+        <tr><td><span class="tag">실현</span></td><td>§10-12</td><td>기술 설계 · 플랫폼 · 마이그레이션</td></tr>
+        <tr><td><span class="tag">보증</span></td><td>§13-15</td><td>테스트 전략 · 수락 기준 · 변경 이력</td></tr>
+      </table>
+      <p class="muted">섹션 추가·삭제 없이 형식 고정 → 검색·참조·리뷰 비용 절감</p>
+    </section>
+
+    <!-- 8. feature 파이프라인 -->
+    <section>
+      <h2>feature 파이프라인 (7단계)</h2>
+      <ol class="step-list">
+        <li><strong>Spec 작성</strong> — <code>spec-writing</code> 스킬 호출</li>
+        <li><strong>승인</strong> — Spec 리뷰 및 확정 (<code>spec_flags</code> 소비)</li>
+        <li><strong>계획</strong> — 구현 단계 세분화, §10 완성</li>
+        <li><strong>Practice 선택</strong> — TDD (고) / Walking Skeleton (중) / Implementation First (저)</li>
+        <li><strong>구현</strong> — 선택한 Practice의 규칙에 따라</li>
+        <li><strong>검증</strong> — AC-NN 단위 통과 여부 확인</li>
+        <li><strong>완료</strong> — Changelog 기록, 락 해제</li>
+      </ol>
+    </section>
+
+    <!-- 9. debug 파이프라인 -->
+    <section>
+      <h2>debug 파이프라인 (8단계)</h2>
+      <ol class="step-list">
+        <li><strong>증상 기록</strong> — 재현 조건·기대값·실제값</li>
+        <li><strong>Spec 확인</strong> — 어느 §·AC가 깨졌는가</li>
+        <li><strong>가설 수립</strong> — 원인 후보 나열</li>
+        <li><strong>검증</strong> — 가설별 실험 설계</li>
+        <li><strong>원인 확정</strong> — <code>spec_flags</code> 기록</li>
+        <li><strong>수정</strong> — 코드 혹은 Spec 교정</li>
+        <li><strong>회귀 테스트</strong> — §13 전략에 따라 추가</li>
+        <li><strong>완료</strong> — Changelog 기록</li>
+      </ol>
+    </section>
+
+    <!-- 10. Practice 선택 기준 -->
+    <section>
+      <h2>Practice 선택 기준</h2>
+      <p class="muted" style="margin-top:-0.3em">위험도 3단계와 1:1로 대응</p>
+      <table>
+        <tr><th>위험도</th><th>Practice</th><th>적합한 작업</th></tr>
+        <tr><td><span class="tag">고</span></td><td><code>TDD</code></td><td>결제·인증·데이터 정합성 등 회귀 민감, 로직 복잡</td></tr>
+        <tr><td><span class="tag">중</span></td><td><code>Walking Skeleton</code></td><td>새 SDK·프로토콜·통신 경로 개척 (통합 리스크)</td></tr>
+        <tr><td><span class="tag">저</span></td><td><code>Implementation First</code></td><td>내부 도구·프로토타입, 검증 범위 작음</td></tr>
+      </table>
+      <p class="muted">혼용 가능 — 예: 관통 경로는 Walking Skeleton, 내부 도메인 로직은 TDD. feature 4단계에서 확정·Changelog 기록.</p>
+    </section>
+
+    <!-- 11. 운영 규약 -->
+    <section>
+      <h2>운영 규약</h2>
+      <div class="two-col">
+        <div class="card">
+          <h3>락 파일</h3>
+          <p><code>.spec-writing-active</code> 등이 남아 있으면 다른 세션이 작업 중일 수 있음. 고아 락이 확실할 때만 제거.</p>
+        </div>
+        <div class="card">
+          <h3>AC-NN · §N 표기</h3>
+          <p>커밋 메시지·이슈·테스트명에서 동일 표기 사용. "어디가 왜 실패했는가"가 검색 가능해진다.</p>
+        </div>
+        <div class="card">
+          <h3>[AI 제안] 태그</h3>
+          <p>§10.2·10.3에서 AI가 생성한 안은 <code>[AI 제안]</code> 태그를 달고, 개발자가 선택·수정 후 태그를 제거한다.</p>
+        </div>
+        <div class="card">
+          <h3>Changelog 마커</h3>
+          <p>각 파이프라인 단계 종료 시 §15에 마커 한 줄. 세션이 중단돼도 다음 세션이 재개 지점을 찾을 수 있다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. 진입점 -->
+    <section>
+      <h2>어디서 시작하나</h2>
+      <table>
+        <tr><th>상황</th><th>트리거</th></tr>
+        <tr><td>새 기능</td><td>"feature 스킬로 시작해줘"</td></tr>
+        <tr><td>버그 수정</td><td>"debug 스킬로 시작해줘"</td></tr>
+        <tr><td>Spec만 작성·수정</td><td>"spec 작성해줘" / "spec 수정해줘"</td></tr>
+        <tr><td>플러그인 투어</td><td><code>/onboard</code></td></tr>
+      </table>
+      <p class="muted">진입 후에는 스킬이 단계별로 질문을 던진다. 그 흐름을 따라가면 된다.</p>
+    </section>
+
+    <!-- 13. 기대 효과 -->
+    <section>
+      <h2>기대 효과</h2>
+      <ul>
+        <li><strong>리뷰 비용 감소</strong> — 15섹션 고정으로 "어디를 봐야 하는가"가 일정함</li>
+        <li><strong>AI 드리프트 차단</strong> — Spec이 SOT, 코드가 Spec과 어긋나면 즉시 감지</li>
+        <li><strong>버그 추적성</strong> — <code>AC-NN</code>·<code>§N</code>으로 증상·원인·수정의 경로가 선형화</li>
+        <li><strong>재개 가능성</strong> — Changelog 마커로 세션 단절에 강함</li>
+      </ul>
+    </section>
+
+    <!-- 14. 한계·앞으로 -->
+    <section>
+      <h2>한계 · 앞으로</h2>
+      <ul>
+        <li>Spec 템플릿 고정이 경량 실험에 과할 수 있음 → <code>Implementation First</code> Practice로 완화.</li>
+        <li>pre-commit 훅 기반 Spec 가드는 후속 과제.</li>
+        <li>기존 Spec을 신규 형식으로 마이그레이션하는 도구 미비.</li>
+      </ul>
+    </section>
+
+    <!-- 15. Q&A -->
+    <section class="title-slide">
+      <h1>Q &amp; A</h1>
+      <p style="margin-top:2em"><code>/onboard</code>로 직접 경험해 보세요.</p>
+    </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    controls: true,
+    progress: true,
+    width: 1280,
+    height: 800,
+    margin: 0.08,
+    minScale: 0.2,
+    maxScale: 1.5,
+    plugins: [ RevealHighlight, RevealNotes ]
+  });
+</script>
+</body>
+</html>
